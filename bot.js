@@ -12,15 +12,19 @@ async function redeemDiamond(playerId, pinCode) {
         const executablePath = process.env.PUPPETEER_EXECUTABLE_PATH || null;
 
         browser = await puppeteer.launch({
-            executablePath: executablePath,
-            headless: true, // รันแบบเบื้องหลังบน Cloud
-            args: [
-                '--no-sandbox',
-                '--disable-setuid-sandbox',
-                '--disable-dev-shm-usage',
-                '--disable-gpu'
-            ]
-        });
+    executablePath: executablePath,
+    headless: true,
+    args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage', // ประหยัด RAM ในระบบ Docker
+        '--disable-accelerated-2d-canvas',
+        '--no-first-run',
+        '--no-zygote',
+        '--single-process', // บังคับรัน Process เดียวเพื่อประหยัด RAM
+        '--disable-gpu'
+    ]
+});
 
         const page = await browser.newPage();
         await page.setViewport({ width: 1280, height: 800 });
